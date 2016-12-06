@@ -1,0 +1,8 @@
+#!/bin/sh
+
+docker run --rm -it \
+	-v "$GOROOT":/usr/local/go \
+	-v "$GOPATH":/go \
+	-v "$(pwd)":/app \
+	empirefoxit/go-jessie-docker \
+	sh -c 'CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags="-s -w" -o main'
