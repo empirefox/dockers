@@ -1,4 +1,4 @@
-# curl-exec
+# remote-exec
 
 ```bash
 // echo "abc"
