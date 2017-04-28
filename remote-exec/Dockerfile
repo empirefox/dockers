@@ -8,6 +8,6 @@ ARG port=9999
 EXPOSE ${port}
 ENV GOMAXPROCS=1 PORT=${port}
 
-# docker run --rm -it -p 9999:9999 empirefoxit/remote-exec http://xxx
+# docker run --rm -it -p 9999:9999 empirefoxit/remote-exec -loglever=error
 COPY entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
