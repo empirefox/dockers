@@ -5,5 +5,5 @@ docker run --rm -it \
 	-v "$(pwd)":/app \
 	-e "GOPATH=/gopath" \
 	-w /app \
-	golang:1.7.4-alpine \
+	golang:1.8.1-alpine \
 	sh -c 'CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags="-s -w" -o main'

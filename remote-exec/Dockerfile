@@ -1,8 +1,9 @@
 FROM alpine:3.5
 
 # http://mirror1.hs-esslingen.de/Mirrors
-RUN sed -i "s|http://dl-cdn.alpinelinux.org|https://mirrors.ustc.edu.cn|g" /etc/apk/repositories; \
-    apk add --no-cache ca-certificates
+#RUN sed -i "s|http://dl-cdn.alpinelinux.org|https://mirrors.ustc.edu.cn|g" /etc/apk/repositories; \
+#    apk add --no-cache ca-certificates
+#RUN apk add --no-cache ca-certificates
 
 ARG port=9999
 EXPOSE ${port}
