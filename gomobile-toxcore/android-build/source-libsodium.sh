@@ -1,0 +1,3 @@
+export LIB_CONFIGURE_OPTIONS=""
+export LIB_EXT_CFLAGS=""
+export SET_DEPENDENCY_SEARCH=no
