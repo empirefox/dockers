@@ -5,8 +5,9 @@
 package hello
 
 /*
-#cgo LDFLAGS: -ltoxencryptsave -ltoxcore -lsodium -lm
+#cgo LDFLAGS: -ltoxencryptsave -ltoxav -ltoxcore -lsodium -lm
 #include "tox/tox.h"
+#include "tox/toxav.h"
 */
 import "C"
 import (

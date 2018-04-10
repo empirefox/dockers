@@ -1,15 +1,24 @@
 FROM runmymind/docker-android-sdk:ubuntu-standalone
 
+# platforms according to gomobile
+RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;27.0.3" "platforms;android-15" "platforms;android-21"
+
 # Golang --------
-# Copied from official golang:1.10, added clang
+# Copied from official golang:1.10, added tools
 # gcc for cgo
 RUN apt-get update && apt-get install -y --no-install-recommends \
+		autoconf \
+		automake \
+		bsdtar \
         clang \
 		g++ \
 		gcc \
 		libc6-dev \
+		libtool \
 		make \
 		pkg-config \
+		python \
+		zipmerge \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV GOLANG_VERSION 1.10.1
@@ -49,7 +58,7 @@ RUN set -eux; \
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
-RUN mkdir -p "$GOPATH/src/golang.org/x" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
+RUN mkdir -p "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
 
 
@@ -88,4 +97,7 @@ RUN go get golang.org/x/mobile/cmd/gomobile && \
 	gomobile init -ndk ${ANDROID_NDK_HOME} && \
 	rm -rf $GOPATH/src
 
+ENV TOOLCHAINS_DIR $GOPATH/pkg/gomobile/ndk-toolchains
+ENV NDK_BUILD_UTILS_DIR /opt/ndk-build
+COPY ndk-build $NDK_BUILD_UTILS_DIR
 # docker build --build-arg https_proxy=http://172.17.0.1:7777 -t empirefoxit/gomobile-ndk .

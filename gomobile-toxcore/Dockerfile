@@ -1,16 +1,18 @@
 FROM empirefoxit/gomobile-ndk
 
-# platforms
-RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;27.0.3" "platforms;android-15" "platforms;android-21"
+ENV OPUS_VERSION 1.2.1
+ENV OPUS_HASH cfafd339ccd9c5ef8d6ab15d7e1a412c054bf4cb4ecbbbcc78c12ef2def70732
 
-COPY android-build android-build
+ENV VPX_VERSION v1.7.0
+ENV VPX_HASH 1fec931eb5c94279ad219a5b6e0202358e94a93a90cfb1603578c326abfc1238
 
 ENV SODIUM_VERSION 1.0.16
 ENV SODIUM_HASH eeadc7e1e1bcef09680fb4837d448fbdf57224978f865ac1c16745868fbd0533
+
 ENV TOXCORE_VERSION 0.2.1
 ENV TOXCORE_HASH 1496164954941b175493fba02bf3115118c0d29feb46cd1ff458a1a11eab1597
 
-ENV TOOLCHAINS_DIR ${GOPATH}/pkg/gomobile/ndk-toolchains
+COPY android-build android-build
 RUN android-build/install.sh
 
 COPY aar /usr/bin

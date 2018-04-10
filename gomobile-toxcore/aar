@@ -1,38 +1,18 @@
 #!/bin/bash
-set -e
 
-export ANDROID_SDK_VERSION=$(${ANDROID_SDK}/tools/bin/sdkmanager --version)
+# build_aar "$@"
+source $NDK_BUILD_UTILS_DIR/build_aar.sh
 
 echo "aar build env:"
 echo "GOLANG_VERSION      ${GOLANG_VERSION}"
 echo "ANDROID_SDK_VERSION ${ANDROID_SDK_VERSION}"
 echo "ANDROID_NDK_VERSION ${ANDROID_NDK_VERSION}"
 echo "SODIUM_VERSION      ${SODIUM_VERSION}"
+echo "OPUS_VERSION        ${OPUS_VERSION}"
+echo "VPX_VERSION         ${VPX_VERSION}"
 echo "TOXCORE_VERSION     ${TOXCORE_VERSION}"
 
-function ndkArch() {
-	case $1 in
-	arm | arm64) echo $1 ;;
-	386) echo x86 ;;
-	amd64) echo x86_64 ;;
-	esac
-}
+# for test
+# go_archs=(arm)
 
-archs=(arm arm64 386 amd64)
-pkg=${@: -1}
-name=$(basename $pkg)
-
-cd $GOPATH/src/$pkg
-rm -f *.aar *.jar
-for arch in ${archs[@]}; do
-	sysroot=$TOOLCHAINS_DIR/$(ndkArch $arch)
-	CC=$sysroot/bin/clang CXX=$sysroot/bin/clang++ \
-		CGO_ENABLED=1 GOOS=android GOARCH=$arch \
-		gomobile bind -target android/$arch -o ./$name-$arch.aar "$@"
-done
-
-zipmerge -S $name-arm.aar $name-arm64.aar $name-386.aar $name-amd64.aar
-mv $name-arm.aar $name.aar
-mv $name-arm-sources.jar $name-sources.jar
-rm -f $name-arm64.aar $name-386.aar $name-amd64.aar \
-	$name-arm64-sources.jar $name-386-sources.jar $name-amd64-sources.jar
+build_aar "$@"
