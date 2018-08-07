@@ -1,0 +1,47 @@
+#!/bin/bash
+
+source $ARM_BUILD_UTILS_DIR/host_compiler.sh
+
+go_archs=(arm arm64)
+
+function build_bin() {
+	pkg=${@: -1}
+	name=$(basename $pkg)
+
+	cd $GOPATH/src/$pkg
+	for arch in ${go_archs[@]}; do
+		toolchain_dir=$TOOLCHAINS_DIR/$arch
+    compiler=$(host_compiler $arch)
+    sysroot=$toolchain_dir/$compiler/libc
+		CC="$toolchain_dir/bin/$compiler-gcc --sysroot=$sysroot" \
+      CXX="$toolchain_dir/bin/$compiler-g++ --sysroot=$sysroot" \
+			CGO_ENABLED=1 GOOS=linux GOARCH=$arch \
+      go build -o ./$name-$arch -ldflags "-s -w" "$@"
+	done
+}
+
+BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+echo "aar build env:"
+echo "GOLANG_VERSION      ${GOLANG_VERSION}"
+echo "SODIUM_VERSION      ${SODIUM_VERSION}"
+echo "OPUS_VERSION        ${OPUS_VERSION}"
+echo "VPX_VERSION         ${VPX_VERSION}"
+echo "TOXCORE_VERSION     ${TOXCORE_VERSION}"
+echo "BUILD_TIME          ${BUILD_TIME}"
+
+# for test
+# go_archs=(arm)
+
+build_bin "$@"
+
+cat <<EOF >$GOPATH/src/${@: -1}/golang-toxcore-arm-linux.json
+{
+  "GOLANG_VERSION": "$GOLANG_VERSION",
+  "SODIUM_VERSION": "$SODIUM_VERSION",
+  "OPUS_VERSION": "$OPUS_VERSION",
+  "VPX_VERSION": "$VPX_VERSION",
+  "TOXCORE_VERSION": "$TOXCORE_VERSION",
+  "BUILD_TIME": "$BUILD_TIME"
+}
+EOF
