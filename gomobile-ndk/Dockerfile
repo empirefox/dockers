@@ -1,7 +1,7 @@
 FROM runmymind/docker-android-sdk:ubuntu-standalone
 
 # platforms according to gomobile
-RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;27.0.3" "platforms;android-15" "platforms;android-21"
+RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;27.0.3" "platforms;android-15"
 
 # Golang --------
 # Copied from official golang:1.10, added tools
@@ -21,20 +21,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		zipmerge \
 	&& rm -rf /var/lib/apt/lists/*
 
-ENV GOLANG_VERSION 1.10.1
+ENV GOLANG_VERSION 1.10.3
 
 RUN set -eux; \
 	\
 # this "case" statement is generated via "update.sh"
 	dpkgArch="$(dpkg --print-architecture)"; \
 	case "${dpkgArch##*-}" in \
-		amd64) goRelArch='linux-amd64'; goRelSha256='72d820dec546752e5a8303b33b009079c15c2390ce76d67cf514991646c6127b' ;; \
-		armhf) goRelArch='linux-armv6l'; goRelSha256='feca4e920d5ca25001dc0823390df79bc7ea5b5b8c03483e5a2c54f164654936' ;; \
-		arm64) goRelArch='linux-arm64'; goRelSha256='1e07a159414b5090d31166d1a06ee501762076ef21140dcd54cdcbe4e68a9c9b' ;; \
-		i386) goRelArch='linux-386'; goRelSha256='acbe19d56123549faf747b4f61b730008b185a0e2145d220527d2383627dfe69' ;; \
-		ppc64el) goRelArch='linux-ppc64le'; goRelSha256='91d0026bbed601c4aad332473ed02f9a460b31437cbc6f2a37a88c0376fc3a65' ;; \
-		s390x) goRelArch='linux-s390x'; goRelSha256='e211a5abdacf843e16ac33a309d554403beb63959f96f9db70051f303035434b' ;; \
-		*) goRelArch='src'; goRelSha256='589449ff6c3ccbff1d391d4e7ab5bb5d5643a5a41a04c99315e55c16bbf73ddc'; \
+		amd64) goRelArch='linux-amd64'; goRelSha256='fa1b0e45d3b647c252f51f5e1204aba049cde4af177ef9f2181f43004f901035' ;; \
+		armhf) goRelArch='linux-armv6l'; goRelSha256='d3df3fa3d153e81041af24f31a82f86a21cb7b92c1b5552fb621bad0320f06b6' ;; \
+		arm64) goRelArch='linux-arm64'; goRelSha256='355128a05b456c9e68792143801ad18e0431510a53857f640f7b30ba92624ed2' ;; \
+		i386) goRelArch='linux-386'; goRelSha256='3d5fe1932c904a01acb13dae07a5835bffafef38bef9e5a05450c52948ebdeb4' ;; \
+		ppc64el) goRelArch='linux-ppc64le'; goRelSha256='f3640b2f0990a9617c937775f669ee18f10a82e424e5f87a8ce794a6407b8347' ;; \
+		s390x) goRelArch='linux-s390x'; goRelSha256='34385f64651f82fbc11dc43bdc410c2abda237bdef87f3a430d35a508ec3ce0d' ;; \
+		*) goRelArch='src'; goRelSha256='567b1cc66c9704d1c019c50bef946272e911ec6baf244310f87f4e678be155f2'; \
 			echo >&2; echo >&2 "warning: current architecture ($dpkgArch) does not have a corresponding Go binary release; will be building from source"; echo >&2 ;; \
 	esac; \
 	\
@@ -64,7 +64,7 @@ RUN mkdir -p "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 
 # Android NDK --------
 ENV ANDROID_NDK_HOME /opt/android-ndk
-ENV ANDROID_NDK_VERSION r16b
+ENV ANDROID_NDK_VERSION r17b
 # download
 RUN mkdir /opt/android-ndk-tmp && \
     cd /opt/android-ndk-tmp && \
